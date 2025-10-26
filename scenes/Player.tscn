@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://celxc5ojt7m30"]
+
+[ext_resource type="Script" uid="uid://c6qmbbv18tcqk" path="res://scenes/player.gd" id="1_kpjcp"]
+[ext_resource type="Texture2D" uid="uid://b8qaoohew2eh8" path="res://addons/PNG/Robot 1/robot1_hold.png" id="2_kne1u"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
+radius = 14.0
+height = 46.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v6fml"]
+radius = 46.173584
+
+[node name="Player" type="CharacterBody2D"]
+rotation = 3.1415927
+script = ExtResource("1_kpjcp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_v6fml")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_kne1u")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_v6fml")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

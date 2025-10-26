@@ -1,0 +1,118 @@
+[gd_scene load_steps=11 format=3 uid="uid://d25wr1cd2scj8"]
+
+[ext_resource type="Shader" uid="uid://cbwornfr0ytgg" path="res://shader/particles.gdshader" id="1_kfwc7"]
+[ext_resource type="Shader" uid="uid://blif6ystf8ysc" path="res://shader/oscure.gdshader" id="2_4a2ha"]
+[ext_resource type="Shader" uid="uid://wjs3wubk601d" path="res://shader/obscure.gdshader" id="3_g6s7q"]
+[ext_resource type="Shader" uid="uid://6fib5y5miqdu" path="res://shader/osc.gdshader" id="4_jtalx"]
+[ext_resource type="Shader" uid="uid://om15lr4w6pl0" path="res://shader/tentacle.gdshader" id="5_wskm7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iw27f"]
+shader = ExtResource("1_kfwc7")
+shader_parameter/particle_count = 200
+shader_parameter/particle_size = 0.00350000016625
+shader_parameter/particle_speed = 2.0
+shader_parameter/particle_opacity = 1.0
+shader_parameter/particle_color = Color(0.34781685, 0.347817, 0.34781682, 1)
+shader_parameter/drift_amount = 1.8050000857375
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urblq"]
+shader = ExtResource("2_4a2ha")
+shader_parameter/enable_base_dark = true
+shader_parameter/darkness = 0.526000024985
+shader_parameter/vignette_strength = 1.7650000838375
+shader_parameter/vignette_size = 0.27200000966012
+shader_parameter/enable_desat = true
+shader_parameter/desaturation = 1.0
+shader_parameter/enable_noise = true
+shader_parameter/noise_intensity = 0.034000001615
+shader_parameter/grain_amount = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71pa8"]
+shader = ExtResource("3_g6s7q")
+shader_parameter/darkness = 0.750000035625
+shader_parameter/vignette_strength = 0.938000044555
+shader_parameter/vignette_size = 0.20300000638262
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mlgqr"]
+shader = ExtResource("4_jtalx")
+shader_parameter/radius = 0.77700003364762
+shader_parameter/edge_softness = 0.5
+shader_parameter/noise_scale = 16.0
+shader_parameter/noise_speed = 1.0
+shader_parameter/color_inside = Color(0.050980393, 0.050980393, 0.050980393, 0)
+shader_parameter/color_edge = Color(0, 0, 0, 1)
+shader_parameter/use_circle_shape = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wslke"]
+shader = ExtResource("5_wskm7")
+shader_parameter/background_color = Color(0, 0, 0, 0)
+shader_parameter/tentacle_color = Color(0.05, 0.05, 0.05, 1)
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/tentacle_count = 16
+shader_parameter/tentacle_thickness = 0.15500000666398
+shader_parameter/tentacle_wiggle = 0.94400004484
+shader_parameter/tentacle_speed = 3.70700017282262
+shader_parameter/tentacle_sharpness = 6.9950003085125
+shader_parameter/movement_detail = -12.9009996627975
+shader_parameter/fade_start = 0.5570000264575
+shader_parameter/fade_end = 0.6990000332025
+
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 128
+visible = false
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.93333334)
+material = SubResource("ShaderMaterial_iw27f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_urblq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_71pa8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0517578e-05
+offset_top = -0.9999695
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect4" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_mlgqr")
+offset_left = 814.0
+offset_top = 150.0
+offset_right = 1159.0
+offset_bottom = 430.0
+mouse_filter = 2
+
+[node name="ColorRect5" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_wslke")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 837.0
+offset_top = 221.0
+offset_right = 1063.0
+offset_bottom = 373.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
