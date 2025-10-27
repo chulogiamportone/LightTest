@@ -16,7 +16,8 @@ func _ready():
 	
 	if characters.size() > 0:
 		set_active_character(characters[0])
-
+		characters[0].point_light_2d.visible=true
+		
 func _input(event):
 	if event.is_action_pressed("follow"):  # E para interactuar
 		if active_char and active_char.can_interact and active_char.nearby_character:
@@ -33,6 +34,7 @@ func _input(event):
 	if event.is_action_pressed("switch_character"):  # C para cambiar personaje
 		if active_char and active_char.can_interact and active_char.nearby_character:
 			switch_to_character(active_char.nearby_character)
+			
 
 	if event.is_action_pressed("toggle_follow"):  # F para que el seguidor deje de seguir
 		stop_following()
@@ -66,9 +68,9 @@ func switch_to_character(character: CharacterBody2D):
 	if dist > 150:
 		#print("Personajes muy lejos para cambiar")
 		return
-	
+	active_char.point_light_2d.visible=false
 	set_active_character(character)
-	
+	character.point_light_2d.visible=true
 	# Si el seguidor es el nuevo activo, actualizar
 	if follower_char == character:
 		follower_char = null
@@ -81,7 +83,8 @@ func swap_leader_follower():
 	# Intercambiar roles
 	var old_leader = active_char
 	var old_follower = follower_char
-	
+	follower_char.point_light_2d.visible=true
+	active_char.point_light_2d.visible=false
 	stop_following()
 	set_active_character(old_follower)
 	start_following(old_leader)

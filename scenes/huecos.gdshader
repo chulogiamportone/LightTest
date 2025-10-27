@@ -5,7 +5,7 @@ const int MAX_HOLES = 16;
 uniform int holes_count : hint_range(0, MAX_HOLES) = 0;
 uniform vec2 holes_pos[MAX_HOLES];
 uniform float holes_radius[MAX_HOLES];
-uniform vec4 dark_color  = vec4(0.0, 0.0, 0.0, 1);
+uniform vec4 dark_color  = vec4(0.0, 0.0, 0.0, 0.85);
 uniform float edge_frac = 0.25; // fracción del radio usada para suavizar bordes
 
 void fragment() {

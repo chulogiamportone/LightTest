@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://celxc5ojt7m30"]
+[gd_scene load_steps=6 format=3 uid="uid://celxc5ojt7m30"]
 
 [ext_resource type="Script" uid="uid://c6qmbbv18tcqk" path="res://scenes/player.gd" id="1_kpjcp"]
 [ext_resource type="Texture2D" uid="uid://b8qaoohew2eh8" path="res://addons/PNG/Robot 1/robot1_hold.png" id="2_kne1u"]
+[ext_resource type="Texture2D" uid="uid://d3hsdu0k5oue5" path="res://light_texture.png" id="3_3li8b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
 radius = 14.0
@@ -26,6 +27,14 @@ texture = ExtResource("2_kne1u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_v6fml")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter_smooth = 13.9
+texture = ExtResource("3_3li8b")
+texture_scale = 0.5
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
