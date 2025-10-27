@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=4 uid="uid://dm4q5wqb35o16"]
+[gd_scene load_steps=17 format=4 uid="uid://dm4q5wqb35o16"]
 
+[ext_resource type="Script" uid="uid://31sdkmvw7y8h" path="res://scenes/map_2.gd" id="1_hs16b"]
 [ext_resource type="Texture2D" uid="uid://2f6ggupqq2oj" path="res://addons/prueba/tilesheet_complete_2X.png" id="1_m0okn"]
 [ext_resource type="Shader" uid="uid://blif6ystf8ysc" path="res://shader/oscure.gdshader" id="5_ccs1r"]
 [ext_resource type="PackedScene" uid="uid://celxc5ojt7m30" path="res://scenes/Player.tscn" id="5_rtqf6"]
@@ -1161,13 +1162,15 @@ shader_parameter/drift_amount = 2.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rutqx"]
 shader = ExtResource("5_u6ti8")
-shader_parameter/holes_count = 0
-shader_parameter/holes_pos = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/holes_radius = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/dark_color = Vector4(0, 0, 0, 1)
-shader_parameter/edge_frac = 0.25
+shader_parameter/dark_color = Vector4(0, 0, 0, 0.7)
+shader_parameter/viewport_size = Vector2(1, 1)
+shader_parameter/global_edge_smooth = 0.02
 
-[node name="Map2" type="Node2D"]
+[node name="Map2" type="Node2D" node_paths=PackedStringArray("camera_node", "color_rect", "mask_viewport")]
+script = ExtResource("1_hs16b")
+camera_node = NodePath("Camera")
+color_rect = NodePath("CanvasLayer/ColorRect")
+mask_viewport = NodePath("LightMaskViewport")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-76, -1256)
@@ -1289,3 +1292,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_rutqx")
 dark_rect_path = NodePath(".")
+
+[node name="LightMaskViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="mask_root" type="Node2D" parent="LightMaskViewport"]

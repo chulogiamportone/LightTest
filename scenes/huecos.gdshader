@@ -1,25 +1,27 @@
 shader_type canvas_item;
 
-const int MAX_HOLES = 16;
-
-uniform int holes_count : hint_range(0, MAX_HOLES) = 0;
-uniform vec2 holes_pos[MAX_HOLES];
-uniform float holes_radius[MAX_HOLES];
-uniform vec4 dark_color  = vec4(0.0, 0.0, 0.0, 1);
-uniform float edge_frac = 0.25; // fracción del radio usada para suavizar bordes
+uniform vec4 dark_color  = vec4(0.0, 0.0, 0.0, 1.0);
+uniform sampler2D light_mask;       // textura generada por el Viewport (Polygon2D blancos)
+uniform vec2 viewport_size = vec2(1024.0, 768.0); // asignar desde GDScript
+uniform float global_edge_smooth = 0.02; // suaviza transiciones si la máscara tiene bordes
 
 void fragment() {
-    vec2 uv = UV;
-    float hole = 0.0;
-    for (int i = 0; i < holes_count; i++) {
-        vec2 p = holes_pos[i];
-        float r = holes_radius[i];
-        float d = distance(uv, p);
-        float edge = r * edge_frac;
-        float s = 1.0 - smoothstep(r - edge, r + edge, d);
-        hole = max(hole, s);
-    }
+    vec2 suv = SCREEN_UV;
+    // muestreo de la máscara; si no hay textura devuelve 0.0 (oscuro)
+    float mask_val = 0.0;
+    #ifdef TEXTURE_LIGHT_MASK_EXISTS
+        mask_val = texture(light_mask, suv).r;
+    #else
+        // si el material no tiene la textura asignada será 0
+        mask_val = 0.0;
+    #endif
+
+    // pequeño suavizado adicional por shader (opcional)
+    mask_val = smoothstep(0.0, 1.0, mask_val);
+
     vec4 outc = dark_color;
-    outc.a *= (1.0 - hole);
+    // where mask_val == 1 => fully visible (no alpha), mask_val == 0 => fully dark
+    outc.a *= (1.0 - mask_val);
+
     COLOR = outc;
 }
