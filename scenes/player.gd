@@ -24,7 +24,7 @@ var cooldown_time_left = 0.0
 
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
-@onready var color_rect: ColorRect = $"../../CanvasLayer/ColorRect"
+
 func _ready():
 	if name == "Player":
 		is_active = true
