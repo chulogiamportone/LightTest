@@ -1,0 +1,136 @@
+[gd_scene load_steps=9 format=3 uid="uid://dp8rtoat6wi5p"]
+
+[ext_resource type="Texture2D" uid="uid://d26gvq3nhici1" path="res://addons/klipartz.com.png" id="1_ukkih"]
+[ext_resource type="Texture2D" uid="uid://d3hsdu0k5oue5" path="res://light_texture.png" id="2_s0nwr"]
+[ext_resource type="AudioStream" uid="uid://clairr1lftjsv" path="res://ElevenLabs_2025-11-03T22_40_24_Kallixis - Monster & Deep _pvc_sp70_s51_sb46_se50_b_m2.mp3" id="3_s0nwr"]
+[ext_resource type="Script" uid="uid://cmc341i6uchkj" path="res://scenes/sucubo_absorsion.gd" id="4_qhahi"]
+
+[sub_resource type="Animation" id="Animation_oybow"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SucuboSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SucuboSprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PointLight2D:energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_qhahi"]
+resource_name = "sucubo"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SucuboSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("SucuboSprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.27387273, 0.27387273, 0.27387273, 1), Color(0.5330367, 0.5330367, 0.5330367, 1), Color(0.27450982, 0.27450982, 0.27450982, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PointLight2D:energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.6, 1.2, 0.6]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hy8pt"]
+_data = {
+&"RESET": SubResource("Animation_oybow"),
+&"sucubo": SubResource("Animation_qhahi")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oybow"]
+radius = 1153.8148
+
+[node name="Sucubo" type="Node2D"]
+modulate = Color(0.8039216, 0, 0.96862745, 1)
+scale = Vector2(0.15, 0.15)
+
+[node name="SucuboSprite" type="Sprite2D" parent="."]
+position = Vector2(1, -1)
+texture = ExtResource("1_ukkih")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_hy8pt")
+}
+autoplay = "sucubo"
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(1, -6)
+scale = Vector2(1.9257813, 1.9257813)
+texture = ExtResource("2_s0nwr")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_s0nwr")
+volume_db = 10.0
+pitch_scale = 0.85
+autoplay = true
+max_distance = 1200.0
+attenuation = 4.000002
+bus = &"Enemy"
+parameters/looping = true
+
+[node name="SucuboAbsorsion" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("4_qhahi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SucuboAbsorsion"]
+visibility_layer = 3
+shape = SubResource("CircleShape2D_oybow")
+
+[connection signal="body_entered" from="SucuboAbsorsion" to="SucuboAbsorsion" method="_on_body_entered"]
+[connection signal="body_exited" from="SucuboAbsorsion" to="SucuboAbsorsion" method="_on_body_exited"]

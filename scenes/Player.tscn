@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://celxc5ojt7m30"]
+[gd_scene load_steps=10 format=3 uid="uid://celxc5ojt7m30"]
 
 [ext_resource type="Script" uid="uid://c6qmbbv18tcqk" path="res://scenes/player.gd" id="1_kpjcp"]
 [ext_resource type="Texture2D" uid="uid://b8qaoohew2eh8" path="res://addons/PNG/Robot 1/robot1_hold.png" id="2_kne1u"]
-[ext_resource type="Texture2D" uid="uid://d3hsdu0k5oue5" path="res://light_texture.png" id="3_3li8b"]
+[ext_resource type="Shader" uid="uid://cbwornfr0ytgg" path="res://shader/particles.gdshader" id="3_mdl7e"]
+[ext_resource type="Texture2D" uid="uid://ci5j1wggbcmg4" path="res://textura_light3.png" id="4_mdl7e"]
+[ext_resource type="AudioStream" uid="uid://mkdshsyh21ov" path="res://stepwood.wav" id="5_qu4a1"]
+[ext_resource type="AudioStream" uid="uid://cf2n584ctqay5" path="res://256098__foolboymedia__mystery-peak2.wav" id="6_70d11"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
 radius = 14.0
@@ -11,8 +14,19 @@ height = 46.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_v6fml"]
 radius = 46.173584
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qu4a1"]
+shader = ExtResource("3_mdl7e")
+shader_parameter/particle_count = 40
+shader_parameter/particle_size = 0.015
+shader_parameter/particle_speed = 0.5
+shader_parameter/particle_opacity = 0.15
+shader_parameter/particle_color = Color(0.8, 0.8, 0.8, 1)
+shader_parameter/drift_amount = 1.0
+
 [node name="Player" type="CharacterBody2D"]
 rotation = 3.1415927
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_kpjcp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -30,11 +44,26 @@ shape = SubResource("CircleShape2D_v6fml")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 visible = false
+material = SubResource("ShaderMaterial_qu4a1")
+position = Vector2(2.7394776e-07, 0.18718338)
+rotation = 1.5707964
+scale = Vector2(0.5376682, 0.3600046)
+color = Color(1, 0.8784314, 0.7176471, 1)
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter_smooth = 13.9
-texture = ExtResource("3_3li8b")
-texture_scale = 0.5
+texture = ExtResource("4_mdl7e")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_qu4a1")
+volume_db = -10.0
+max_distance = 100.0
+bus = &"Personaje"
+
+[node name="AudioStreamPlayer2D2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_70d11")
+bus = &"Items"
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_player_2d_finished"]

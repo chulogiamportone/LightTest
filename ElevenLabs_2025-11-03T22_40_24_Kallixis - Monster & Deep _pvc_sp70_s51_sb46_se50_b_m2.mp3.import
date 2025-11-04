@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://clairr1lftjsv"
+path="res://.godot/imported/ElevenLabs_2025-11-03T22_40_24_Kallixis - Monster & Deep _pvc_sp70_s51_sb46_se50_b_m2.mp3-b02ceb6d06d7b36b7a1e1bbaed49266a.mp3str"
+
+[deps]
+
+source_file="res://ElevenLabs_2025-11-03T22_40_24_Kallixis - Monster & Deep _pvc_sp70_s51_sb46_se50_b_m2.mp3"
+dest_files=["res://.godot/imported/ElevenLabs_2025-11-03T22_40_24_Kallixis - Monster & Deep _pvc_sp70_s51_sb46_se50_b_m2.mp3-b02ceb6d06d7b36b7a1e1bbaed49266a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

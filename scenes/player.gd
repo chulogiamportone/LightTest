@@ -24,6 +24,20 @@ var cooldown_time_left = 0.0
 
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
+@onready var area_2d: StaticBody2D = $"../../Doors/Door"
+
+@onready var sfx: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var audio_stream_player_2d_2: AudioStreamPlayer2D = $AudioStreamPlayer2D2
+
+@export var drop_distance := 32.0
+
+
+var is_sound_play:bool=false
+
+func play_sound(path: String):
+	sfx.stream = load(path)
+	sfx.play()
+
 
 func _ready():
 	if name == "Player":
@@ -37,6 +51,17 @@ func _physics_process(delta):
 	elif is_following and follow_target:
 		handle_follow(delta)
 	move_and_slide()
+	
+	if Input.is_action_just_pressed("ui_accept"):
+		if area_2d.is_open:
+			area_2d.close_door()
+		else:
+			area_2d.open_door()  # Llama a la función de apertura de la puerta
+	
+	if Input.is_action_just_pressed("drop"):
+		_drop_selected()
+	if Input.is_action_just_pressed("use_item"):
+		_use_selected()
 
 func handle_movement():
 	var dir = Vector2.ZERO
@@ -61,9 +86,13 @@ func handle_movement():
 	if Input.is_action_pressed("ui_down") and Input.is_action_pressed("ui_right"):
 		rotation_degrees = 45
 	dir = dir.normalized()
-	
+	if dir!=Vector2.ZERO:
+		if !is_sound_play:
+			play_sound("res://stepwood.wav")
+			is_sound_play=true
 	var current_speed = SPEED
 	if is_running:
+		
 		current_speed = RUN_SPEED
 	
 	velocity = dir * current_speed
@@ -123,3 +152,34 @@ func _on_interaction_area_body_exited(body):
 	if body == nearby_character:
 		nearby_character = null
 		can_interact = false
+
+func _drop_selected():
+	var inv: Node = get_tree().get_first_node_in_group("inventory")
+	if inv == null:
+		return
+	var item_scene: PackedScene = inv.consume_selected_item()
+	if item_scene:
+		var dropped := item_scene.instantiate()
+		# Asegurate que en tu escena principal exista un nodo "Items"
+		get_parent().get_parent().get_node("Items").add_child(dropped)
+		audio_stream_player_2d_2.play()
+		if rotation_degrees>-135 and rotation_degrees<-45:
+			dropped.global_position = global_position + Vector2.UP * drop_distance
+		if rotation_degrees<135 and rotation_degrees>45:
+			dropped.global_position = global_position + Vector2.DOWN * drop_distance
+		if rotation_degrees<-135 or rotation_degrees>135:
+			dropped.global_position = global_position + Vector2.LEFT * drop_distance
+		if rotation_degrees>-45 and rotation_degrees<45:
+			dropped.global_position = global_position + Vector2.RIGHT * drop_distance
+
+func _use_selected():
+	var inv: Node = get_tree().get_first_node_in_group("inventory")
+	if inv == null:
+		return
+	var item_scene: PackedScene = inv.get_selected_item()
+	if item_scene == null:
+		return
+
+
+func _on_audio_stream_player_2d_finished() -> void:
+	is_sound_play=false
